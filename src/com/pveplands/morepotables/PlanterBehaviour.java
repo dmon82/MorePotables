@@ -55,6 +55,9 @@ public class PlanterBehaviour implements ModAction, BehaviourProvider, ActionPer
         if (action != actionId)
             return true;
         
+        if (!MorePotables.isPlantable(activated.getTemplateId()))
+            return true;
+        
         return plantHerb(act, performer, activated, target, counter);
     }
     
@@ -65,6 +68,11 @@ public class PlanterBehaviour implements ModAction, BehaviourProvider, ActionPer
         if (!Methods.isActionAllowed(performer, act.getNumber())) {
             return true;
         }
+        else if (!performer.isWithinDistanceTo(pot, 6f)) {
+            performer.getCommunicator().sendNormalServerMessage("You're too far away.");
+            return true;
+        }
+        
         int time = 0;
         if (counter == 1.0f) {
             String type = herbSpice.isSpice() ? "spice" : "herb";
